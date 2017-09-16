@@ -6,8 +6,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class TrieNode<V> {
+    public static long instanceCount = 0L;
     private Map<Character, TrieNode<V>> tbl = null;
     private V value = null;
+    public TrieNode() {
+        instanceCount++;
+    }
     // ---------------
     public TrieNode<V> findTarget(CharSequence key) {
         TrieNode<V> target = null;
