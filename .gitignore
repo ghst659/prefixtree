@@ -1,0 +1,44 @@
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Python setuptools intermediates
+*.whl
+*.egg
+bdist.*
+**/python/build/scripts-3.4/
+**/python/build/scripts-3.5/
+**/__pycache__/
+**/python/build/
+**/develop-eggs/
+**/eggs/
+**/python/lib/
+**/python/lib64/
+**/python/parts/
+**/python/sdist/
+**/python/var/
+*.egg-info/
+.installed.cfg
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+*~
+target
+**/test-output
+**/.project
+**/.classpath
+**/.settings
+**/.idea
+*.iml
+**/.metadata
+/setexpt
+**/nbactions.xml
+**/nb-configuration.xml
+
