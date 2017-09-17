@@ -13,33 +13,33 @@ public class TrieNode<V> {
         instanceCount++;
     }
     // ---------------
-    public TrieNode<V> findTarget(CharSequence key) {
+    public TrieNode<V> findTarget(CharSequence path) {
         TrieNode<V> target = null;
-        int L = key.length();
+        int L = path.length();
         if (L == 0) {
             target = this;
         } else if (L > 0 && this.tbl != null) {
-            Character c = key.charAt(0);
+            Character c = path.charAt(0);
             if (this.tbl.containsKey(c)) {
-                target = this.tbl.get(c).findTarget(key.subSequence(1, L));
+                target = this.tbl.get(c).findTarget(path.subSequence(1, L));
             }
         }
         return target;
     }
-    public TrieNode<V> makeTarget(CharSequence key) {
+    public TrieNode<V> makeTarget(CharSequence path) {
         TrieNode<V> target = null;
-        int L = key.length();
+        int L = path.length();
         if (L == 0) {
             target = this;
         } else if (L > 0) {
             if (this.tbl == null) {
                 this.tbl = new TreeMap<>();
             }
-            Character c = key.charAt(0);
+            Character c = path.charAt(0);
             if (!this.tbl.containsKey(c)) {
                 this.tbl.put(c, new TrieNode<V>());
             }
-            target = this.tbl.get(c).makeTarget(key.subSequence(1, L));
+            target = this.tbl.get(c).makeTarget(path.subSequence(1, L));
         }
         return target;
     }
@@ -54,14 +54,14 @@ public class TrieNode<V> {
         return (target != null) ? target.value : null;
     }
 
-    public List<String> listPaths(String prefix) {
+    public List<String> listPaths(String pathPrefix) {
         List<String> result = new LinkedList<>();
         if (value != null) {
-            result.add(prefix);
+            result.add(pathPrefix);
         }
         if (this.tbl != null) {
             for (Map.Entry<Character, TrieNode<V>> kv: this.tbl.entrySet()) {
-                String newPrefix = prefix + kv.getKey();
+                String newPrefix = pathPrefix + kv.getKey();
                 result.addAll(kv.getValue().listPaths(newPrefix));
             }
         }

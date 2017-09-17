@@ -14,19 +14,22 @@ import java.util.List;
 import java.util.Set;
 
 public class DictTest {
-    private static final String DICTFILE = "/usr/share/dict/british-english";
+    private static final String DICTFILE = "/usr/share/dict/american-english";
     private static List<String> ALLWORDS = new ArrayList<>();
     static {
         ALLWORDS.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader(DICTFILE))) {
-            for (String line = br.readLine(); line != null; line = br.readLine()) {
-                ALLWORDS.add(line);
+        long dt = latency(
+            ()-> {
+                try (BufferedReader br = new BufferedReader(new FileReader(DICTFILE))) {
+                    for (String line = br.readLine(); line != null; line = br.readLine()) {
+                        ALLWORDS.add(line);
+                    }
+                } catch (IOException e) {
+                    System.err.format("IOException: %s\n", e.getMessage());
+                }
             }
-        } catch (IOException e) {
-            System.err.format("IOException: %s\n", e.getMessage());
-        } finally {
-            // System.err.format("data count = %d\n", ALLWORDS.size());
-        }
+        );
+        System.err.format("%s: %d words in %d\n", DICTFILE, ALLWORDS.size(), dt);
     }
     private static long latency(Runnable operation) {
         long t0 = System.currentTimeMillis();
@@ -60,20 +63,24 @@ public class DictTest {
     @Test
     public void testSubset() {
         String[] SUBSETS = {
-            "a", "qual", "actual", "game", "in", "out", "zz"
+            "a", "qual", "e", "f", "actual", "game", "in", "out", "zz"
         };
         for (String prefix: SUBSETS) {
             System.err.println(prefix);
             Set<String> expectedSubset = compileSubset(prefix);
-            Set<String> foundSubset = new HashSet<>();
-            long dt = latency(
-                () -> {
-                    foundSubset.addAll(sut.matchingElements(prefix));
-                }
-            );
-            System.err.format("%s: trie   latency: %d\n", prefix, dt);
+            Set<String> foundSubset = findSubset(prefix);
             Assert.assertEquals(expectedSubset, foundSubset);
         }
+    }
+    private Set<String> findSubset(String prefix) {
+        Set<String> foundSubset = new HashSet<>();
+        long dt = latency(
+            () -> {
+                foundSubset.addAll(sut.matchingElements(prefix));
+            }
+        );
+        System.err.format("%s: trie   latency: %d\n", prefix, dt);
+        return foundSubset;
     }
     private Set<String> compileSubset(String prefix) {
         Set<String> result = new HashSet<>();
