@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 public class Trie<V> {
     public static long instanceCount = 0L;
@@ -80,5 +81,39 @@ public class Trie<V> {
             count = this.tbl.size();
         }
         return count;
+    }
+    public int maxDepth(int startDepth) {
+        int nextDepth = startDepth + 1;
+        int result = nextDepth;
+        if (this.tbl != null) {
+            for (Map.Entry<Character, Trie<V>> kv: this.tbl.entrySet()) {
+                int branchDepth = kv.getValue().maxDepth(nextDepth);
+                result = Math.max(result, branchDepth);
+            }
+        }
+        return result;
+    }
+    public static class Item<E> {
+        int depth = 0;
+        Trie<E> node = null;
+    }
+    public Item<V> deepestNode(int startDepth, Function<Trie<V>, Boolean> nodeTest) {
+        Item<V> result = null;
+        int nextDepth = startDepth + 1;
+        if (nodeTest == null || nodeTest.apply(this)) {
+            result = new Item<V>();
+            result.depth = nextDepth;
+            result.node = this;
+        }
+        if (this.tbl != null) {
+            for (Map.Entry<Character, Trie<V>> kv: this.tbl.entrySet()) {
+                Item<V> branchItem = kv.getValue().deepestNode(nextDepth, nodeTest);
+                if (branchItem != null
+                        && (result == null || result.depth < branchItem.depth)) {
+                    result = branchItem;
+                }
+            }
+        }
+        return result;
     }
 }
