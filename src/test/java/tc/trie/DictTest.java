@@ -42,7 +42,7 @@ public class DictTest {
     @Before
     public void setUp() {
         sut = new TrieSet();
-        TrieNode.instanceCount = 0L;
+        Trie.instanceCount = 0L;
         long dt = latency(
             () -> {
                 for (String text : ALLWORDS) {
@@ -50,7 +50,7 @@ public class DictTest {
                 }
             }
         );
-        System.err.format("Trie build: %d, nodeCount %d\n", dt, TrieNode.instanceCount);
+        System.err.format("Trie build: %d, nodeCount %d\n", dt, Trie.instanceCount);
     }
     @After
     public void tearDown() {

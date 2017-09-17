@@ -5,16 +5,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class TrieNode<V> {
+public class Trie<V> {
     public static long instanceCount = 0L;
-    private Map<Character, TrieNode<V>> tbl = null;
+    private Map<Character, Trie<V>> tbl = null;
     private V value = null;
-    public TrieNode() {
+    public Trie() {
         instanceCount++;
     }
     // ---------------
-    public TrieNode<V> findTarget(CharSequence path) {
-        TrieNode<V> target = null;
+    public V getValue() {
+        return value;
+    }
+    public void setValue(V newValue) {
+        value = newValue;
+    }
+    public Trie<V> findTarget(CharSequence path) {
+        Trie<V> target = null;
         int L = path.length();
         if (L == 0) {
             target = this;
@@ -26,8 +32,8 @@ public class TrieNode<V> {
         }
         return target;
     }
-    public TrieNode<V> makeTarget(CharSequence path) {
-        TrieNode<V> target = null;
+    public Trie<V> makeTarget(CharSequence path) {
+        Trie<V> target = null;
         int L = path.length();
         if (L == 0) {
             target = this;
@@ -37,45 +43,41 @@ public class TrieNode<V> {
             }
             Character c = path.charAt(0);
             if (!this.tbl.containsKey(c)) {
-                this.tbl.put(c, new TrieNode<V>());
+                this.tbl.put(c, new Trie<V>());
             }
             target = this.tbl.get(c).makeTarget(path.subSequence(1, L));
         }
         return target;
     }
-
-    public void put(CharSequence key, V val) {
-        TrieNode<V> target = this.makeTarget(key);
-        target.value = val;
-    }
-
-    public V get(CharSequence key) {
-        TrieNode<V> target = this.findTarget(key);
-        return (target != null) ? target.value : null;
-    }
-
-    public List<String> listPaths(String pathPrefix) {
+    public List<String> listTrails(String accumulatedTrail) {
         List<String> result = new LinkedList<>();
         if (value != null) {
-            result.add(pathPrefix);
+            result.add(accumulatedTrail);
         }
         if (this.tbl != null) {
-            for (Map.Entry<Character, TrieNode<V>> kv: this.tbl.entrySet()) {
-                String newPrefix = pathPrefix + kv.getKey();
-                result.addAll(kv.getValue().listPaths(newPrefix));
+            for (Map.Entry<Character, Trie<V>> kv: this.tbl.entrySet()) {
+                String nextAccumulatedTrail = accumulatedTrail + kv.getKey();
+                result.addAll(kv.getValue().listTrails(nextAccumulatedTrail));
             }
         }
         return result;
     }
-    public int countPaths() {
+    public int countTrails() {
         int count = 0;
         if (value != null) {
             count++;
         }
         if (this.tbl != null) {
-            for (Map.Entry<Character, TrieNode<V>> kv: this.tbl.entrySet()) {
-                count += kv.getValue().countPaths();
+            for (Map.Entry<Character, Trie<V>> kv: this.tbl.entrySet()) {
+                count += kv.getValue().countTrails();
             }
+        }
+        return count;
+    }
+    public int childCount() {
+        int count = 0;
+        if (this.tbl != null) {
+            count = this.tbl.size();
         }
         return count;
     }
