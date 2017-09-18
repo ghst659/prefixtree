@@ -56,5 +56,6 @@ public class SuffixTreeTest {
         Assert.assertEquals(3, sut.occurrenceCount("o"));
         Assert.assertEquals(1, sut.occurrenceCount("or"));
         Assert.assertEquals(0, sut.occurrenceCount("v"));
+        Assert.assertEquals(1, sut.occurrenceCount("format"));
     }
 }

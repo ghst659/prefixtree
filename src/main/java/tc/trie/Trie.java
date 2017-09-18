@@ -10,6 +10,7 @@ public class Trie<V> {
     public static long instanceCount = 0L;
     private Map<Character, Trie<V>> tbl = null;
     private V value = null;
+    private Trie<V> suffixLink = null;
     public Trie() {
         instanceCount++;
     }
@@ -19,6 +20,12 @@ public class Trie<V> {
     }
     public void setValue(V newValue) {
         value = newValue;
+    }
+    public Trie<V> getSuffixLink() {
+        return this.suffixLink;
+    }
+    public void setSuffixLink(Trie<V> n) {
+        this.suffixLink = n;
     }
     public Trie<V> findTarget(CharSequence path) {
         Trie<V> target = null;

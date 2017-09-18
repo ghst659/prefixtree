@@ -11,10 +11,15 @@ public class SuffixTree {
     public SuffixTree(String text) {
         String path = text + SENTINEL;
         int L = path.length();
+        Trie<Boolean> lastSentinel = null;
         for (int i = 0; i < L; ++i) {
             String subPath = path.substring(i);
             Trie<Boolean> sentinelNode = root.makeTarget(subPath);
             sentinelNode.setValue(true);
+            if (lastSentinel != null) {
+                sentinelNode.setSuffixLink(lastSentinel);
+            }
+            lastSentinel = sentinelNode;
         }
     }
     public List<String> suffixes() {
