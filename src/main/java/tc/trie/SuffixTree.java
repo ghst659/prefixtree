@@ -5,6 +5,9 @@ import java.util.List;
 public class SuffixTree {
     private final static char SENTINEL = '\0';
     private Trie<Boolean> root = new Trie<>();
+    public Trie<Boolean> getRoot() {
+        return root;
+    }
     public SuffixTree(String text) {
         String path = text + SENTINEL;
         int L = path.length();

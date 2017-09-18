@@ -14,25 +14,19 @@ public class TrieTest {
     }
     @Test
     public void testDeepestNode() {
-        Trie<Long> root = new Trie<>();
-        Trie<Long> target = root.makeTarget("abaaba");
-        target.setValue(1L);
-        target = root.findTarget("ab");
-        target.setValue(2L);
-        Trie.Item<Long> n1 = root.deepestNode(
+        SuffixTree sut = new SuffixTree("abaaba");
+        Trie<Boolean> root = sut.getRoot();
+        Trie<Boolean> target = root.findTarget("ab");
+        target.setValue(false);
+        Trie.Item<Boolean> n1 = root.deepestNode(
             0,
-            (Trie<Long> n) -> {return n.getValue() != null && n.getValue() == 1L;}
+            (Trie<Boolean> n) -> {return n.getValue() != null && ! n.getValue();}
         );
-        Assert.assertEquals(7, n1.depth);
-        Trie.Item<Long> n2 = root.deepestNode(
+        Assert.assertEquals(3, n1.depth);
+        Trie.Item<Boolean> n2 = root.deepestNode(
             0,
-            (Trie<Long> n) -> {return n.getValue() != null && n.getValue() == 2L;}
+            (Trie<Boolean> n) -> {return n.childCount() > 1;}
         );
-        Assert.assertEquals(3, n2.depth);
-//        Trie.Item<Long> n3 = root.deepestNode(
-//            0,
-//            (Trie<Long> n) -> {return n.childCount() > 1;}
-//        );
-//        Assert.assertEquals(2, n3.depth);
+        Assert.assertEquals(4, n2.depth);
     }
 }

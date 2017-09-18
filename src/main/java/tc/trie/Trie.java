@@ -82,12 +82,12 @@ public class Trie<V> {
         }
         return count;
     }
-    public int maxDepth(int startDepth) {
-        int nextDepth = startDepth + 1;
-        int result = nextDepth;
+    public int maxDepth(int prevDepth) {
+        int curDepth = prevDepth + 1;
+        int result = curDepth;
         if (this.tbl != null) {
             for (Map.Entry<Character, Trie<V>> kv: this.tbl.entrySet()) {
-                int branchDepth = kv.getValue().maxDepth(nextDepth);
+                int branchDepth = kv.getValue().maxDepth(curDepth);
                 result = Math.max(result, branchDepth);
             }
         }
@@ -97,17 +97,17 @@ public class Trie<V> {
         int depth = 0;
         Trie<E> node = null;
     }
-    public Item<V> deepestNode(int startDepth, Function<Trie<V>, Boolean> nodeTest) {
+    public Item<V> deepestNode(int prevDepth, Function<Trie<V>, Boolean> nodeTest) {
         Item<V> result = null;
-        int nextDepth = startDepth + 1;
+        int curDepth = prevDepth + 1;
         if (nodeTest == null || nodeTest.apply(this)) {
             result = new Item<V>();
-            result.depth = nextDepth;
+            result.depth = curDepth;
             result.node = this;
         }
         if (this.tbl != null) {
             for (Map.Entry<Character, Trie<V>> kv: this.tbl.entrySet()) {
-                Item<V> branchItem = kv.getValue().deepestNode(nextDepth, nodeTest);
+                Item<V> branchItem = kv.getValue().deepestNode(curDepth, nodeTest);
                 if (branchItem != null
                         && (result == null || result.depth < branchItem.depth)) {
                     result = branchItem;
