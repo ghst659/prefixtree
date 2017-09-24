@@ -13,7 +13,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <v.jvm>1.8</v.jvm>
-    <v.mavencompilerplugin>3.5.1</v.mavencompilerplugin>
+    <v.mavencompilerplugin>3.7.0</v.mavencompilerplugin>
   </properties>
   <build>
     <plugins>
